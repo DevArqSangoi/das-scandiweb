@@ -11,10 +11,10 @@ class ProductDatabase
      */
     public function __construct()
     {
-        $host = '127.0.0.1';
-        $db = 'test';
-        $user = 'root';
-        $pass = 'abluble';
+        $host = 'localhost';
+        $db = 'id20931669_dasproducts';
+        $user = 'id20931669_devarq';
+        $pass = 'Abluble123?!';
         $charset = 'utf8mb4';
 
         $dsn = "mysql:host=$host;dbname=$db;charset=$charset";

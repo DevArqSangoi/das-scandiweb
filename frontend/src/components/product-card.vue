@@ -1,24 +1,28 @@
 <template>
   <div class="product-card card">
-    <input
-      type="checkbox"
+    <div
       class="delete-checkbox"
-      :checked="selected"
-      @change="update"
-    />
-    <div class="card-title">{{ product.name }}</div>
-    <div class="card-attribute">{{ product.sku }}</div>
-    <div class="card-price">{{ product.price }}</div>
-    <div class="card-attribute">{{ product.type }}</div>
-    <div v-if="product.type === 'dvd'" class="card-attribute">
-      Size: {{ product.size }} MB
-    </div>
-    <div v-if="product.type === 'book'" class="card-attribute">
-      Weight: {{ product.weight }} KG
-    </div>
-    <div v-if="product.type === 'furniture'" class="card-attribute">
-      Dimensions: {{ product.height }} H x {{ product.width }} W x
-      {{ product.length }} L
+      :class="{ checked: selected }"
+      @click="toggle"
+    ></div>
+    <div class="card-content">
+      <div class="card-title">{{ product.name }}</div>
+      <div class="card-attribute">{{ product.sku }}</div>
+      <div class="card-price">US$ {{ product.price }}</div>
+      <div class="card-attribute">{{ typeMapping[product.type] }}</div>
+      <div v-if="product.type === 'dvd'" class="card-attribute">
+        Size: {{ product.size }} MB
+      </div>
+      <div v-if="product.type === 'book'" class="card-attribute">
+        Weight: {{ product.weight }} KG
+      </div>
+      <div v-if="product.type === 'furniture'" class="card-attribute">
+        Dimensions:
+        <div>
+          {{ product.height }} H x {{ product.width }} W x
+          {{ product.length }} L
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -39,7 +43,13 @@ watch(selected, (newValue: boolean) => {
   emit("update:checked", newValue);
 });
 
-const update = (event: Event) => {
-  selected.value = (event.target as HTMLInputElement).checked;
+const toggle = () => {
+  selected.value = !selected.value;
+};
+
+const typeMapping = {
+  dvd: "DVD",
+  book: "Book",
+  furniture: "Furniture",
 };
 </script>

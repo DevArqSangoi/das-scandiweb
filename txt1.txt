@@ -1,0 +1,100 @@
+<template>
+  <form
+    id="product_form"
+    class="add-container dynamic-form"
+    @submit.prevent="submitForm"
+  >
+    <div class="header">
+      <h1>PRODUCT ADD</h1>
+      <div class="button-group">
+        <button type="submit" class="button">Save</button>
+        <button type="button" class="button" @click="cancel">Cancel</button>
+      </div>
+    </div>
+    <div class="line-divider"></div>
+    <div class="input-group">
+      <label for="sku">SKU:</label>
+      <input
+        type="text"
+        id="sku"
+        v-model="selectedProduct.sku"
+        placeholder="SKU"
+      />
+    </div>
+    <div class="input-group">
+      <label for="name">Name:</label>
+      <input
+        type="text"
+        id="name"
+        v-model="selectedProduct.name"
+        placeholder="Name"
+      />
+    </div>
+    <div class="input-group">
+      <label for="price">Price ($):</label>
+      <input
+        v-model.number="selectedProduct.price"
+        id="price"
+        placeholder="Price"
+      />
+    </div>
+    <div class="select-type">
+      <label for="productType">Type:</label>
+      <select v-model="selectedProduct.type" id="productType">
+        <option value="dvd">DVD</option>
+        <option value="book">Book</option>
+        <option value="furniture">Furniture</option>
+      </select>
+    </div>
+    <div v-if="selectedProduct.type === 'dvd'">
+      <div class="input-group">
+        <label for="size">Size (mb):</label>
+        <input
+          v-model.number="selectedProduct.size"
+          id="size"
+          placeholder="Size"
+        />
+      </div>
+    </div>
+    <div v-if="selectedProduct.type === 'book'">
+      <div class="input-group">
+        <label for="weight">Weight (kg):</label>
+        <input
+          v-model.number="selectedProduct.weight"
+          id="weight"
+          placeholder="Weight"
+        />
+      </div>
+    </div>
+    <div v-if="selectedProduct.type === 'furniture'">
+      <div class="input-group">
+        <label for="height">Height:</label>
+        <input
+          v-model.number="selectedProduct.height"
+          id="height"
+          placeholder="Height"
+        />
+      </div>
+      <div class="input-group">
+        <label for="width">Width:</label>
+        <input
+          v-model.number="selectedProduct.width"
+          id="width"
+          placeholder="Width"
+        />
+      </div>
+      <div class="input-group">
+        <label for="length">Length:</label>
+        <input
+          v-model.number="selectedProduct.length"
+          id="length"
+          placeholder="Length"
+        />
+      </div>
+    </div>
+    <div class="line-divider"></div>
+    <div class="footer">
+      <span>Scandiweb Test assignment</span>
+    </div>
+  </form>
+</template>

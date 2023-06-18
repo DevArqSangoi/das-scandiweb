@@ -1,0 +1,120 @@
+<script setup lang="ts">
+import { computed, reactive } from "vue";
+import { useRouter } from "vue-router";
+import useProducts, {
+  DvdProduct,
+  BookProduct,
+  FurnitureProduct,
+} from "../composables/useProducts";
+
+const router = useRouter();
+const { addProduct } = useProducts();
+
+const productType = reactive({ value: "dvd" });
+
+const dvdProduct = reactive<DvdProduct>({
+  sku: "",
+  name: "",
+  price: 0,
+  type: "dvd",
+  size: 0,
+});
+
+const bookProduct = reactive<BookProduct>({
+  sku: "",
+  name: "",
+  price: 0,
+  type: "book",
+  weight: 0,
+});
+
+const furnitureProduct = reactive<FurnitureProduct>({
+  sku: "",
+  name: "",
+  price: 0,
+  type: "furniture",
+  height: 0,
+  width: 0,
+  length: 0,
+});
+
+const selectedProduct = computed(() => {
+  switch (productType.value) {
+    case "dvd":
+      return dvdProduct;
+    case "book":
+      return bookProduct;
+    case "furniture":
+      return furnitureProduct;
+    default:
+      throw new Error(`Unsupported product type: ${productType.value}`);
+  }
+});
+
+// Validation refs
+const validation = reactive({
+  isValidSku: true,
+  isValidName: true,
+  isValidPrice: true,
+  isValidSize: true,
+  isValidWeight: true,
+  isValidHeight: true,
+  isValidWidth: true,
+  isValidLength: true,
+  isValidForm: true,
+});
+
+async function submitForm() {
+  validation.isValidForm = validateForm();
+
+  if (validation.isValidForm) {
+    try {
+      console.log(selectedProduct.value);
+      await addProduct(selectedProduct.value);
+      router.push("/products");
+    } catch (error) {
+      console.error("Erro ao adicionar produto:", error);
+    }
+  }
+}
+
+function validateForm() {
+  validation.isValidSku = selectedProduct.value.sku !== "";
+  validation.isValidName = selectedProduct.value.name !== "";
+  validation.isValidPrice = selectedProduct.value.price > 0;
+
+  switch (selectedProduct.value.type) {
+    case "dvd":
+      validation.isValidSize =
+        selectedProduct.value.size > 0 && selectedProduct.value.size <= 45000; // até 45GB
+      break;
+    case "book":
+      validation.isValidWeight =
+        selectedProduct.value.weight > 0 && selectedProduct.value.weight <= 50; // até 50kg
+      break;
+    case "furniture":
+      validation.isValidHeight =
+        selectedProduct.value.height > 0 && selectedProduct.value.height <= 3; // até 3 metros
+      validation.isValidWidth =
+        selectedProduct.value.width > 0 && selectedProduct.value.width <= 3; // até 3 metros
+      validation.isValidLength =
+        selectedProduct.value.length > 0 && selectedProduct.value.length <= 3; // até 3 metros
+      break;
+  }
+
+  return (
+    validation.isValidSku &&
+    validation.isValidName &&
+    validation.isValidPrice &&
+    validation.isValidSize &&
+    validation.isValidWeight &&
+    validation.isValidHeight &&
+    validation.isValidWidth &&
+    validation.isValidLength
+  );
+}
+
+const cancel = () => {
+  router.push("/products");
+};
+</script>

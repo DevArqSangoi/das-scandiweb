@@ -2,6 +2,11 @@
   <div class="container">
     <div class="header">
       <h1>PRODUCT LIST</h1>
+      <transition name="fade">
+        <p v-if="deleteStatus !== 'idle'" class="delete">
+          {{ deleteStatus === "deleting" ? "Deleting..." : "Deleted!" }}
+        </p>
+      </transition>
       <div class="button-group">
         <router-link to="/add-product" class="button">Add Product</router-link>
         <button
@@ -15,8 +20,7 @@
     </div>
     <div class="line-divider"></div>
     <carousel
-      class="meupau"
-      :mouseDrag="true"
+      :mouseDrag="false"
       :transition="1500"
       :items-to-show="1.3"
       :wrap-around="true"
@@ -34,22 +38,42 @@
       </Slide>
       <template #addons>
         <navigation />
-        <pagination />
       </template>
     </carousel>
     <div class="line-divider"></div>
+    <div class="footer">
+      <div class="empty-div"></div>
+      <span class="foottext">Scandiweb Test assignment</span>
+      <div class="slider-container">
+        <label class="switch">
+          <input
+            type="checkbox"
+            v-model="isDarkMode"
+            id="theme-switch"
+            @change="toggleTheme"
+          />
+          <span class="slider round">
+            <span class="moon">&#127769;</span>
+            <span class="sun">&#9728;</span>
+          </span>
+        </label>
+      </div>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { Carousel, Slide, Navigation, Pagination } from "vue3-carousel";
+import { Carousel, Slide, Navigation } from "vue3-carousel";
 import "vue3-carousel/dist/carousel.css";
 import { ref, onMounted, computed } from "vue";
 import { Product } from "../composables/useProducts";
 import useProducts from "../composables/useProducts";
 import ProductCard from "./product-card.vue";
+import useTheme from "@/composables/useTheme";
 
-const { products, loadProducts, deleteProducts } = useProducts();
+const { toggleTheme, isDarkMode } = useTheme();
+const { products, loadProducts, deleteProducts, deleteStatus } = useProducts();
+
 const selectedProducts = ref<boolean[]>([]);
 
 onMounted(async () => {
