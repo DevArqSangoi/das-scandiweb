@@ -1,3 +1,7 @@
+<!-- 
+This component is used to display a list of products, allow users to add new products, and delete selected products.
+A theme switcher is also provided at the bottom to switch between light and dark modes.
+-->
 <template>
   <div class="container">
     <div class="header">
@@ -8,13 +12,13 @@
         </p>
       </transition>
       <div class="button-group">
-        <router-link to="/add-product" class="button">Add Product</router-link>
+        <router-link to="/add-product" class="button">ADD</router-link>
         <button
           @click="deleteSelectedProducts"
           class="button"
           id="delete-product-btn"
         >
-          Mass Delete
+          MASS DELETE
         </button>
       </div>
     </div>
@@ -63,6 +67,9 @@
 </template>
 
 <script setup lang="ts">
+/**
+ * Import necessary dependencies and hooks.
+ */
 import { Carousel, Slide, Navigation } from "vue3-carousel";
 import "vue3-carousel/dist/carousel.css";
 import { ref, onMounted, computed } from "vue";
@@ -71,16 +78,29 @@ import useProducts from "../composables/useProducts";
 import ProductCard from "./product-card.vue";
 import useTheme from "@/composables/useTheme";
 
+/**
+ * Define constants from useTheme and useProducts.
+ */
 const { toggleTheme, isDarkMode } = useTheme();
 const { products, loadProducts, deleteProducts, deleteStatus } = useProducts();
 
+/**
+ * A ref to store the status of the selected products. Initialized as an empty array.
+ */
 const selectedProducts = ref<boolean[]>([]);
 
+/**
+ * Lifecycle hook for mounted. Load products data when component is mounted.
+ */
 onMounted(async () => {
   await loadProducts();
   selectedProducts.value = new Array(products.value.length).fill(false);
 });
 
+/**
+ * Function to delete selected products. It maps over the selectedProducts to create a new array of products to be deleted.
+ * After deletion, reload the product list and reset the selectedProducts array.
+ */
 const deleteSelectedProducts = async () => {
   const productsToDelete: Product[] = selectedProducts.value
     .map((isChecked, index) => (isChecked ? products.value[index] : null))
@@ -90,6 +110,9 @@ const deleteSelectedProducts = async () => {
   selectedProducts.value = new Array(products.value.length).fill(false);
 };
 
+/**
+ * Computed value for chunked products, it chunks the products array in chunks of 16 products.
+ */
 const chunkedProducts = computed(() => {
   let chunked = [];
   for (let i = 0; i < products.value.length; i += 16) {

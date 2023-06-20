@@ -41,7 +41,7 @@ class BookProduct extends Product
     public function setWeight($weight)
     {
         if (!is_numeric($weight) || $weight <= 0) {
-            throw new InvalidArgumentException('Weight must be a positive number');
+            throw new InvalidArgumentException('Weight must be a positive number.');
         }
         $this->weight = $weight;
     }
@@ -56,9 +56,8 @@ class BookProduct extends Product
     public static function createFromData($data)
     {
         if (!isset($data['weight'])) {
-            throw new Exception('Missing weight for book');
+            throw new Exception('Missing weight for book.');
         }
         return new self($data['sku'], $data['name'], $data['price'], $data['weight']);
     }
 }
-?>

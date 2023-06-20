@@ -24,57 +24,56 @@ class ProductAPI
     /**
      * Handles the incoming API request.
      */
-    public function handleRequest()
+    public function handleRequest($sku = null)
     {
         $method = $_SERVER['REQUEST_METHOD'];
-        $path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-        $path = ltrim($path, '/');
-        $segments = explode('/', $path);
+        $type = $_SERVER['HTTP_PRODUCT_TYPE'] ?? null;
 
-        if ($segments[0] == 'api' && $segments[1] == 'products') {
-            switch ($method) {
-                case 'GET':
-                    $type = $_SERVER['HTTP_PRODUCT_TYPE'] ?? null;
-                    if ($type) {
-                        $this->getProducts($type);
-                    } else {
-                        $this->getAllProducts();
-                    }
-                    break;
-                case 'POST':
+        switch ($method) {
+            case 'GET':
+                if ($type) {
+                    $this->getProducts($type);
+                } else {
+                    $this->getAllProducts();
+                }
+                break;
+            case 'POST':
+                $requestBody = file_get_contents('php://input');
+                $requestData = json_decode($requestBody, true);
+                if (isset($requestData['delete'])) {
+                    $sku = $requestData['delete'];
+                    $this->deleteProduct($sku);                    
+                } else {
                     $this->createProduct();
-                    break;
-                case 'DELETE':
-                    if (isset($segments[2])) {
-                        $this->deleteProduct($segments[2]);
-                    } else {
-                        $this->sendResponse(400, ['error' => 'Missing product sku']);
-                    }
-                    break;
-                default:
-                    $this->sendResponse(405, ['error' => 'Method not allowed']);
-                    break;
-            }
-        } else {
-            $this->sendResponse(404, ['error' => 'Not found']);
+                }
+                break;
+            case 'DELETE':
+                if ($sku) {
+                    $this->deleteProduct($sku);
+                } else {
+                    $this->sendResponse(400, ['error' => 'Missing product sku']);
+                }
+                break;
+            default:
+                $this->sendResponse(405, ['error' => 'Method not allowed']);
+                break;
         }
     }
 
     /**
      * Creates a new product based on the incoming API request data.
      */
+
     public function createProduct()
     {
         try {
             $data = json_decode(file_get_contents('php://input'), true);
             $type = $data['type'] ?? null;
-
             $productClasses = [
                 'book' => BookProduct::class,
                 'dvd' => DvdProduct::class,
                 'furniture' => FurnitureProduct::class,
             ];
-
             if ($type && isset($productClasses[$type])) {
                 $product = $productClasses[$type]::createFromData($data);
                 $this->saveProduct($this->db->getPDO(), $product);
@@ -162,6 +161,16 @@ class ProductAPI
     public function deleteProduct($sku)
     {
         try {
+            $this->db->deleteProduct($sku);
+            $this->sendResponse(200, ['message' => 'Product deleted']);
+        } catch (Exception $e) {
+            $this->sendResponse(500, ['error' => $e->getMessage()]);
+        }
+    }
+    public function deleteProductPost($requestData)
+    {
+        try {
+            $sku = $requestData['sku'];
             $this->db->deleteProduct($sku);
             $this->sendResponse(200, ['message' => 'Product deleted']);
         } catch (Exception $e) {

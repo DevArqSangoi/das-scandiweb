@@ -11,10 +11,10 @@ class ProductDatabase
      */
     public function __construct()
     {
-        $host = 'sql205.infinityfree.com';
-        $db = 'if0_34454901_dasscandiweb';
-        $user = 'if0_34454901';
-        $pass = 'abluble123';
+        $host = 'localhost';
+        $db = 'id20931669_dasproducts';
+        $user = 'id20931669_devarq';
+        $pass = 'Abluble123?!';
         $charset = 'utf8mb4';
 
         $dsn = "mysql:host=$host;dbname=$db;charset=$charset";
@@ -76,3 +76,4 @@ class ProductDatabase
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 }
+?>

@@ -42,7 +42,7 @@ class DvdProduct extends Product
     public function setSize($size)
     {
         if (!is_numeric($size) || $size <= 0) {
-            throw new InvalidArgumentException('Size must be a positive number');
+            throw new InvalidArgumentException('Size must be a positive number.');
         }
         $this->size = $size;
     }
@@ -57,9 +57,8 @@ class DvdProduct extends Product
     public static function createFromData($data)
     {
         if (!isset($data['size'])) {
-            throw new Exception('Missing size for DVD');
+            throw new Exception('Missing size for DVD.');
         }
         return new self($data['sku'], $data['name'], $data['price'], $data['size']);
     }
 }
-?>

@@ -52,7 +52,7 @@ class FurnitureProduct extends Product
     public function setHeight($height)
     {
         if (!is_numeric($height) || $height <= 0) {
-            throw new InvalidArgumentException('Height must be a positive number');
+            throw new InvalidArgumentException('Height must be a positive number.');
         }
         $this->height = $height;
     }
@@ -76,7 +76,7 @@ class FurnitureProduct extends Product
     public function setWidth($width)
     {
         if (!is_numeric($width) || $width <= 0) {
-            throw new InvalidArgumentException('Width must be a positive number');
+            throw new InvalidArgumentException('Width must be a positive number.');
         }
         $this->width = $width;
     }
@@ -100,7 +100,7 @@ class FurnitureProduct extends Product
     public function setLength($length)
     {
         if (!is_numeric($length) || $length <= 0) {
-            throw new InvalidArgumentException('Length must be a positive number');
+            throw new InvalidArgumentException('Length must be a positive number.');
         }
         $this->length = $length;
     }
@@ -115,7 +115,7 @@ class FurnitureProduct extends Product
     public static function createFromData($data)
     {
         if (!isset($data['height']) || !isset($data['width']) || !isset($data['length'])) {
-            throw new Exception('Missing dimensions for furniture');
+            throw new Exception('Missing dimensions for furniture.');
         }
         return new self($data['sku'], $data['name'], $data['price'], $data['height'], $data['width'], $data['length']);
     }

@@ -7,11 +7,7 @@ require_once __DIR__ . '/src/Product/ProductAPI.php';
 require_once __DIR__ . '/src/Product/DVD.php';
 require_once __DIR__ . '/src/Product/Book.php';
 require_once __DIR__ . '/src/Product/Furniture.php';
-require_once __DIR__ . '/../router.php';
-
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
+require_once 'router.php';
 
 $api = new ProductAPI();
 

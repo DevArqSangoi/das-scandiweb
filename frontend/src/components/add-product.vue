@@ -1,3 +1,10 @@
+<!-- 
+The Product Add form component.
+
+This component provides a form to add new products of type: DVD, Book, Furniture.
+It validates input and shows an error message for invalid data.
+User can switch the theme between dark and light modes.
+-->
 <template>
   <form
     id="product_form"
@@ -224,6 +231,9 @@
 </template>
 
 <script setup lang="ts">
+/**
+ * Import necessary dependencies and hooks.
+ */
 import { computed, reactive } from "vue";
 import { useRouter } from "vue-router";
 import useProducts, {
@@ -232,11 +242,30 @@ import useProducts, {
   FurnitureProduct,
 } from "../composables/useProducts";
 import useTheme from "@/composables/useTheme";
+
+/**
+ * Use products hook for adding products.
+ */
 const { addProduct } = useProducts();
+
+/**
+ * Use theme hook for toggling dark and light modes.
+ */
 const { toggleTheme, isDarkMode } = useTheme();
 
+/**
+ * Vue router instance for navigation.
+ */
 const router = useRouter();
+
+/**
+ * Reactive reference to the type of product being added.
+ */
 const productType = reactive({ value: "dvd" });
+
+/**
+ * Reactive reference to a DVD product, with all its properties.
+ */
 const dvdProduct = reactive<DvdProduct>({
   sku: "",
   name: "",
@@ -245,6 +274,9 @@ const dvdProduct = reactive<DvdProduct>({
   size: 0,
 });
 
+/**
+ * Reactive reference to a Book product, with all its properties.
+ */
 const bookProduct = reactive<BookProduct>({
   sku: "",
   name: "",
@@ -253,6 +285,9 @@ const bookProduct = reactive<BookProduct>({
   weight: 0,
 });
 
+/**
+ * Reactive reference to a Furniture product, with all its properties.
+ */
 const furnitureProduct = reactive<FurnitureProduct>({
   sku: "",
   name: "",
@@ -263,6 +298,9 @@ const furnitureProduct = reactive<FurnitureProduct>({
   length: 0,
 });
 
+/**
+ * Computed property that returns the currently selected product.
+ */
 const selectedProduct = computed(() => {
   switch (productType.value) {
     case "dvd":
@@ -276,7 +314,9 @@ const selectedProduct = computed(() => {
   }
 });
 
-// Validation refs
+/**
+ * Reactive references to validation flags for different form fields.
+ */
 const validation = reactive({
   isValidSku: true,
   isValidName: true,
@@ -289,20 +329,27 @@ const validation = reactive({
   isValidForm: true,
 });
 
+/**
+ * Function that submits the form and validates the input.
+ * Adds the product if the input is valid, otherwise shows error messages.
+ */
 async function submitForm() {
   validation.isValidForm = validateForm();
 
   if (validation.isValidForm) {
     try {
-      console.log(selectedProduct.value);
       await addProduct(selectedProduct.value);
       router.push("/products");
     } catch (error) {
-      console.error("Erro ao adicionar produto:", error);
+      console.error("Error adding product:", error);
     }
   }
 }
 
+/**
+ * Function that validates form input for the product being added.
+ * Different product types have different validation rules.
+ */
 function validateForm() {
   validation.isValidSku = selectedProduct.value.sku !== "";
   validation.isValidName = selectedProduct.value.name !== "";
@@ -310,20 +357,15 @@ function validateForm() {
 
   switch (selectedProduct.value.type) {
     case "dvd":
-      validation.isValidSize =
-        selectedProduct.value.size > 0 && selectedProduct.value.size <= 45000;
+      validation.isValidSize = selectedProduct.value.size > 0;
       break;
     case "book":
-      validation.isValidWeight =
-        selectedProduct.value.weight > 0 && selectedProduct.value.weight <= 10;
+      validation.isValidWeight = selectedProduct.value.weight > 0;
       break;
     case "furniture":
-      validation.isValidHeight =
-        selectedProduct.value.height > 0 && selectedProduct.value.height <= 5;
-      validation.isValidWidth =
-        selectedProduct.value.width > 0 && selectedProduct.value.width <= 5;
-      validation.isValidLength =
-        selectedProduct.value.length > 0 && selectedProduct.value.length <= 5;
+      validation.isValidHeight = selectedProduct.value.height > 0;
+      validation.isValidWidth = selectedProduct.value.width > 0;
+      validation.isValidLength = selectedProduct.value.length > 0;
       break;
   }
 
@@ -339,6 +381,9 @@ function validateForm() {
   );
 }
 
+/**
+ * Function that navigates the user back to the products list page.
+ */
 const cancel = () => {
   router.push("/products");
 };

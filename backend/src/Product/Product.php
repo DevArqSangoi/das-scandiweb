@@ -57,7 +57,7 @@ abstract class Product
     public function setSku($sku)
     {
         if (empty($sku)) {
-            throw new InvalidArgumentException('SKU cannot be empty');
+            throw new InvalidArgumentException('SKU cant be empty.');
         }
         $this->sku = $sku;
     }
@@ -81,7 +81,7 @@ abstract class Product
     public function setName($name)
     {
         if (empty($name)) {
-            throw new InvalidArgumentException('Name cannot be empty');
+            throw new InvalidArgumentException('Name cannot be empty.');
         }
         $this->name = $name;
     }
@@ -105,7 +105,7 @@ abstract class Product
     public function setPrice($price)
     {
         if (!is_numeric($price) || $price <= 0) {
-            throw new InvalidArgumentException('Price must be a positive number');
+            throw new InvalidArgumentException('Price must be a positive number.');
         }
         $this->price = $price;
     }
@@ -129,9 +129,8 @@ abstract class Product
     public function setType($type)
     {
         if (empty($type)) {
-            throw new InvalidArgumentException('Type cannot be empty');
+            throw new InvalidArgumentException('Type cannot be empty.');
         }
         $this->type = $type;
     }
 }
-?>

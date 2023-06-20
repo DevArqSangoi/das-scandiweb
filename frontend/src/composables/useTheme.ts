@@ -7,7 +7,7 @@ interface ThemeHook {
 }
 
 export default function useTheme(): ThemeHook {
-  const theme = ref(localStorage.getItem("theme") || "light");
+  const theme = ref(localStorage.getItem("theme") || "dark");
   const isDarkMode = ref(theme.value === "dark");
 
   watchEffect(() => {
