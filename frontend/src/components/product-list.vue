@@ -1,4 +1,6 @@
-<!-- 
+<!--
+Product List Component  
+
 This component is used to display a list of products, allow users to add new products, and delete selected products.
 A theme switcher is also provided at the bottom to switch between light and dark modes.
 -->

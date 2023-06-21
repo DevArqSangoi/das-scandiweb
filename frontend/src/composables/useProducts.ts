@@ -127,7 +127,6 @@ export default function useProducts(): UseProductsReturn {
    */
   const deleteProduct = async (product: Product) => {
     try {
-      console.log({ delete: product.sku });
       const response = await fetch(
         "https://das-scandiweb.000webhostapp.com/api/products",
         {
