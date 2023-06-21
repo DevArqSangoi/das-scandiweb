@@ -15,13 +15,7 @@ A theme switcher is also provided at the bottom to switch between light and dark
       </transition>
       <div class="button-group">
         <router-link to="/add-product" class="button">ADD</router-link>
-        <button
-          @click="deleteSelectedProducts"
-          class="button"
-          id="delete-product-btn"
-        >
-          MASS DELETE
-        </button>
+        <button @click="deleteSelectedProducts">MASS DELETE</button>
       </div>
     </div>
     <div class="line-divider"></div>
@@ -29,7 +23,7 @@ A theme switcher is also provided at the bottom to switch between light and dark
       :mouseDrag="false"
       :transition="1500"
       :items-to-show="1.3"
-      :wrap-around="true"
+      :wrap-around="false"
     >
       <Slide v-for="(chunk, index) in chunkedProducts" :key="index">
         <div class="product-grid">

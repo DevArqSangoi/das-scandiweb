@@ -94,7 +94,7 @@ const typeMapping = {
  * (checked or unchecked) has changed, and if it has, it updates the 'selected' variable
  * and logs a message to the console.
  *
- * This function was implemented because of a specific requirement for QA. The QA team
+ * This function was implemented because of a specific requirement for QA. The QA script
  * manipulates checkbox states directly through the developer tools, and Vue.js isn't
  * designed to detect these types of state changes natively. This function helps Vue.js
  * recognize those state changes.
@@ -103,10 +103,11 @@ let intervalId: number;
 onMounted(() => {
   intervalId = window.setInterval(() => {
     const checkbox = $(".delete-checkbox")[0] as HTMLInputElement;
-    if (checkbox.checked !== selected.value) {
+    if (checkbox.checked == true && selected.value == false) {
       selected.value = checkbox.checked;
+      console.log(`Checkbox changed! New value: ${selected.value}`);
     }
-  }, 2000);
+  }, 1000);
 });
 
 /**
